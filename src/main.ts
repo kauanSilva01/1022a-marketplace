@@ -17,28 +17,6 @@ app.get("/jogos", async (req, res) => {
             port: process.env.dbport ? parseInt(process.env.dbport) : 3306
         })
         const [result, fields] = await connection.query("SELECT * from jogos")
-<<<<<<< Updated upstream
-=======
-        await connection.end()
-        res.send(result)
-    } catch (e) {
-        res.status(500).send("Server ERROR")
-    }
-})
-app.post("/jogos", async (req, res) => {
-    try {
-        const connection = await mysql.createConnection({
-            host: process.env.dbhost ? process.env.dbhost : "localhost",
-            user: process.env.dbuser ? process.env.dbuser : "root",
-            password: process.env.dbpassword ? process.env.dbpassword : "",
-            database: process.env.dbname ? process.env.dbname : "lojajogos",
-            port: process.env.dbport ? parseInt(process.env.dbport) : 3306
-        })
-        const {id,nome,descricao,preco,imagem} = req.body
-        const [result, fields] = 
-                    await connection.query("INSERT INTO produtos VALUES (?,?,?,?,?)",
-                            [id,nome,descricao,preco,imagem])
->>>>>>> Stashed changes
         await connection.end()
         res.send(result)
     } catch (e) {
@@ -46,7 +24,6 @@ app.post("/jogos", async (req, res) => {
         res.status(500).send("Server ERROR")
     }
 })
-<<<<<<< Updated upstream
 app.post("/jogos", async (req, res) => {
     try {
         const connection = await mysql.createConnection({
@@ -68,8 +45,6 @@ app.post("/jogos", async (req, res) => {
     }
 })
 
-=======
->>>>>>> Stashed changes
 app.listen(8000, () => {
     console.log("Iniciei o servidor")
 })
