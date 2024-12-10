@@ -76,7 +76,7 @@ app.post("/login", async (req, res) => {
                     await connection.query("INSERT INTO usuario VALUES (?,?)",
                             [email,senha])
         await connection.end()
-        res.send(result)
+        res.send(result)    
     } catch (e) {
         console.log(e)
         res.status(500).send(e)
