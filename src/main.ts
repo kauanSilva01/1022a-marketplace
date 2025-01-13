@@ -48,9 +48,17 @@ app.delete("/produtos/:id",async(req,res)=>{
 })
 
 //ALTERAR
-app.put("/produtos/:id",(req,res)=>{
+app.put("/produtos/:id",async(req,res)=>{
+    const {id,nome,descricao,preco,imagem} = req.body
     console.log(req.params.id)
-    
+    const query = "UPDATE produtos SET nome=?,descricao=?,preco=?,imagem=? WHERE id=?"
+    const parametros = [nome,descricao,preco,imagem,req.params.id]
+
+    const banco = new BancoMysql()
+    await banco.criarConexao()
+    const result = await banco.consultar(query,parametros)
+    await banco.finalizarConexao()
+    res.send("Produto excluido com sucesso id: "+req.params.id)
 })
 
 app.listen(8000, () => {
