@@ -2,6 +2,7 @@ import express from 'express'
 import mysql from 'mysql2/promise'
 import cors from 'cors'
 import BancoMysql from './db/banco-mysql'
+import BancoMongo from './db/banco-mongo'
 
 const app = express()
 app.use(express.json())
@@ -10,7 +11,7 @@ app.use(cors())
 
 app.get("/produtos", async (req, res) => {
     try {
-        const banco = new BancoMysql()
+        const banco = new BancoMongo()
         await banco.criarConexao()
         const result = await banco.listar()
         await banco.finalizarConexao()
@@ -23,7 +24,7 @@ app.get("/produtos", async (req, res) => {
 app.post("/produtos", async (req, res) => {
     try {
         const {id,nome,descricao,preco,imagem} = req.body
-        const banco = new BancoMysql()
+        const banco = new BancoMongo()
         await banco.criarConexao()
         const produto = {id,nome,descricao,preco,imagem}
         const result = await banco.inserir(produto)
@@ -37,7 +38,7 @@ app.post("/produtos", async (req, res) => {
 
 //DELETAR
 app.delete("/produtos/:id",async(req,res)=>{
-    const banco = new BancoMysql()
+    const banco = new BancoMongo()
     await banco.criarConexao()
     const result = await banco.excluir(req.params.id)
     await banco.finalizarConexao()
@@ -48,7 +49,7 @@ app.delete("/produtos/:id",async(req,res)=>{
 app.put("/produtos/:id",async(req,res)=>{
     const {id,nome,descricao,preco,imagem} = req.body
     const produto = {nome,descricao,preco,imagem}
-    const banco = new BancoMysql()
+    const banco = new BancoMongo()
     await banco.criarConexao()
     const result = await banco.alterar(req.params.id,produto)
     await banco.finalizarConexao()
