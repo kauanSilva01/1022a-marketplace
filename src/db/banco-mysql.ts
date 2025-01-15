@@ -22,6 +22,10 @@ class BancoMysql{
         if(!this.connection) throw new Error("Erro de conexão com o banco de dados.")
         await this.connection.end()
     }
+    async listar(){}
+    async inserir(){}
+    async excluir(){}
+    async alterar(){}
 }
 
 export default BancoMysql
