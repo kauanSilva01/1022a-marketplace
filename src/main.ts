@@ -12,7 +12,7 @@ app.get("/produtos", async (req, res) => {
     try {
         const banco = new BancoMysql()
         await banco.criarConexao()
-        const result = await banco.consultar("select * from produtos")
+        const result = await banco.listar()
         await banco.finalizarConexao()
         res.send(result)
     } catch (e) {
