@@ -38,11 +38,18 @@ app.post("/produtos", async (req, res) => {
 
 //DELETAR
 app.delete("/produtos/:id",async(req,res)=>{
-    const banco = new BancoMongo()
-    await banco.criarConexao()
-    const result = await banco.excluir(req.params.id)
-    await banco.finalizarConexao()
-    res.send("Produto excluido com sucesso id: "+req.params.id)
+    try{
+        const banco = new BancoMongo()
+        await banco.criarConexao()
+        const result = await banco.excluir(req.params.id)
+        await banco.finalizarConexao()
+        res.status(200).send("Produto excluido com sucesso id: "+req.params.id)
+    }
+    catch(e){
+        console.log(e)
+        res.status(500).send("Erro ao excluir")
+    }
+    
 })
 
 //ALTERAR
