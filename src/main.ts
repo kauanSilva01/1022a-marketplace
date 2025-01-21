@@ -39,7 +39,7 @@ app.post("/produtos", async (req, res) => {
         const {id,nome,descricao,preco,imagem} = req.body
         const banco = new BancoMongo()
         await banco.criarConexao()
-        const produto = {id,nome,descricao,preco,imagem}
+        const produto = {id:parseInt(id),nome,descricao,preco,imagem}
         const result = await banco.inserir(produto)
         await banco.finalizarConexao()
         res.send(result) 
