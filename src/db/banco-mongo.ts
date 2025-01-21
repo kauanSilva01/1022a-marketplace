@@ -36,6 +36,13 @@ class BancoMongo{
         const result = db.collection('produtos').updateOne({id:idNumber},{$set:produto})
         return result
     }
+    async listarPorId(id:string){
+        const idNumber = parseInt(id)
+        if(!this.connection) throw new Error("Erro de conexão com o banco de dados.")
+        const db = this.connection.db("banco1022a");
+        const result = db.collection('produtos').findOne({id:idNumber})
+        return result
+    }
 }
 
 export default BancoMongo
