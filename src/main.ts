@@ -1,61 +1,87 @@
 import express from 'express'
 import mysql from 'mysql2/promise'
 import cors from 'cors'
-import BancoMysql from './db/banco-mysql'
-import BancoMongo from './db/banco-mongo'
 
 const app = express()
 app.use(express.json())
 app.use(cors())
 
 
-app.get("/produtos", async (req, res) => {
+app.get("/jogos", async (req, res) => {
     try {
-        const banco = new BancoMongo()
-        await banco.criarConexao()
-        const result = await banco.listar()
-        await banco.finalizarConexao()
+        const connection = await mysql.createConnection({
+            host: process.env.dbhost ? process.env.dbhost : "localhost",
+            user: process.env.dbuser ? process.env.dbuser : "root",
+            password: process.env.dbpassword ? process.env.dbpassword : "",
+            database: process.env.dbname ? process.env.dbname : "lojajogos",
+            port: process.env.dbport ? parseInt(process.env.dbport) : 3306
+        })
+        const [result, fields] = await connection.query("SELECT * from jogos")
+        await connection.end()
         res.send(result)
     } catch (e) {
         console.log(e)
         res.status(500).send("Server ERROR")
     }
 })
-app.post("/produtos", async (req, res) => {
+app.post("/jogos", async (req, res) => {
     try {
-        const {id,nome,descricao,preco,imagem} = req.body
-        const banco = new BancoMongo()
-        await banco.criarConexao()
-        const produto = {id,nome,descricao,preco,imagem}
-        const result = await banco.inserir(produto)
-        await banco.finalizarConexao()
-        res.send(result) 
+        const connection = await mysql.createConnection({
+            host: process.env.dbhost ? process.env.dbhost : "localhost",
+            user: process.env.dbuser ? process.env.dbuser : "root",
+            password: process.env.dbpassword ? process.env.dbpassword : "",
+            database: process.env.dbname ? process.env.dbname : "lojajogos",
+            port: process.env.dbport ? parseInt(process.env.dbport) : 3306
+        })
+        const {codigojg,nome,informacaojg,preco,imagem} = req.body
+        const [result, fields] = 
+                    await connection.query("INSERT INTO jogos VALUES (?,?,?,?,?)",
+                            [codigojg,nome,informacaojg,imagem,preco])
+        await connection.end()
+        res.send(result)
     } catch (e) {
         console.log(e)
         res.status(500).send(e)
     }
 })
 
-//DELETAR
-app.delete("/produtos/:id",async(req,res)=>{
-    const banco = new BancoMongo()
-    await banco.criarConexao()
-    const result = await banco.excluir(req.params.id)
-    await banco.finalizarConexao()
-    res.send("Produto excluido com sucesso id: "+req.params.id)
+app.get("/login", async (req, res) => {
+    try {
+        const connection = await mysql.createConnection({
+            host: process.env.dbhost ? process.env.dbhost : "localhost",
+            user: process.env.dbuser ? process.env.dbuser : "root",
+            password: process.env.dbpassword ? process.env.dbpassword : "",
+            database: process.env.dbname ? process.env.dbname : "lojajogos",
+            port: process.env.dbport ? parseInt(process.env.dbport) : 3306
+        })
+        const [result, fields] = await connection.query("SELECT * from usuario")
+        await connection.end()
+        res.send(result)
+    } catch (e) {
+        console.log(e)
+        res.status(500).send("Server ERROR")
+    }
 })
-
-//ALTERAR
-app.put("/produtos/:id",async(req,res)=>{
-    const {id,nome,descricao,preco,imagem} = req.body
-    const produto = {nome,descricao,preco,imagem}
-    const banco = new BancoMongo()
-    await banco.criarConexao()
-    const result = await banco.alterar(req.params.id,produto)
-    await banco.finalizarConexao()
-    res.send("Produto alterado com sucesso id: "+req.params.id)
+app.post("/login", async (req, res) => {
+    try {
+        const connection = await mysql.createConnection({
+            host: process.env.dbhost ? process.env.dbhost : "localhost",
+            user: process.env.dbuser ? process.env.dbuser : "root",
+            password: process.env.dbpassword ? process.env.dbpassword : "",
+            database: process.env.dbname ? process.env.dbname : "lojajogos",
+            port: process.env.dbport ? parseInt(process.env.dbport) : 3306
+        })
+        const {email, senha} = req.body
+        const [result, fields] = 
+                    await connection.query("INSERT INTO usuario VALUES (?,?)",
+                            [email,senha])
+        await connection.end()
+        res.send(result)    
+    } catch (e) {
+        console.log(e)
+        res.status(500).send(e)
+    }
 })
-
 app.listen(8000, () => {
     console.log("Iniciei o servidor")
 })
