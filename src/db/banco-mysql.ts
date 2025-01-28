@@ -29,22 +29,22 @@ class BancoMysql{
     }
     async inserir(jogos:{codigojg:number,nome:string,informacaojg:string,imagem:string,preco:string}){
         if(!this.connection) throw new Error("Erro de conexão com o banco de dados.")
-        const [result, fields] = await this.connection.query("INSERT INTO produtos VALUES (?,?,?,?,?)",[jogos.codigojg,jogos.nome,jogos.informacaojg,jogos.preco,jogos.imagem])
+        const [result, fields] = await this.connection.query("INSERT INTO jogos VALUES (?,?,?,?,?)",[jogos.codigojg,jogos.nome,jogos.informacaojg,jogos.preco,jogos.imagem])
         return result
     }
     async excluir(codigojg:string){
         if(!this.connection) throw new Error("Erro de conexão com o banco de dados.")
-        const [result, fields] = await this.connection.query("DELETE FROM produtos WHERE codigojg = ?",[codigojg])
+        const [result, fields] = await this.connection.query("DELETE FROM jogos WHERE codigojg = ?",[codigojg])
         return result
     }
     async alterar(codigojg:string,jogos:{codigojg?:string,nome:string,informacaojg:string,imagem:string,preco:string}){
         if(!this.connection) throw new Error("Erro de conexão com o banco de dados.")
-        const [result, fields] = await this.connection.query("UPDATE produtos SET nome=?,descricao=?,preco=?,imagem=? WHERE id=?",[jogos.nome,jogos.informacaojg,jogos.preco,jogos.imagem,codigojg])
+        const [result, fields] = await this.connection.query("UPDATE jogos SET nome=?,descricao=?,preco=?,imagem=? WHERE id=?",[jogos.nome,jogos.informacaojg,jogos.preco,jogos.imagem,codigojg])
         return result
     }
     async listarPorId(codigojg:string){
         if(!this.connection) throw new Error("Erro de conexão com o banco de dados.")
-        const [result, fields] = await this.connection.query("SELECT * FROM produtos WHERE codigojg = ?",[codigojg]) as RowDataPacket[]
+        const [result, fields] = await this.connection.query("SELECT * FROM jogos WHERE codigojg = ?",[codigojg]) as RowDataPacket[]
         return result[0]
     }
 }
