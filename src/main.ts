@@ -1,11 +1,12 @@
 import express from 'express'
 import mysql from 'mysql2/promise'
 import cors from 'cors'
-<<<<<<< Updated upstream
-=======
+
 import BancoMysql from './db/banco-mysql'
 import { request } from 'https'
->>>>>>> Stashed changes
+
+import BancoMongo from './db/banco-mongo'
+
 
 const app = express()
 app.use(express.json())
@@ -18,7 +19,7 @@ app.get("/jogos", async (req, res) => {
             host: process.env.dbhost ? process.env.dbhost : "localhost",
             user: process.env.dbuser ? process.env.dbuser : "root",
             password: process.env.dbpassword ? process.env.dbpassword : "",
-            database: process.env.dbname ? process.env.dbname : "lojajogos",
+            database: process.env.dbname ? process.env.dbname : "defaultdb",
             port: process.env.dbport ? parseInt(process.env.dbport) : 3306
         })
         const [result, fields] = await connection.query("SELECT * from jogos")
@@ -35,7 +36,7 @@ app.post("/jogos", async (req, res) => {
             host: process.env.dbhost ? process.env.dbhost : "localhost",
             user: process.env.dbuser ? process.env.dbuser : "root",
             password: process.env.dbpassword ? process.env.dbpassword : "",
-            database: process.env.dbname ? process.env.dbname : "lojajogos",
+            database: process.env.dbname ? process.env.dbname : "defaultdb",
             port: process.env.dbport ? parseInt(process.env.dbport) : 3306
         })
         const {codigojg,nome,informacaojg,preco,imagem} = req.body
@@ -51,21 +52,21 @@ app.post("/jogos", async (req, res) => {
 })
 
 //DELETAR 
-app.delete("/produtos/:id",async(req,res)=>{
-    console.log(req.params.id)
-    const query= "DELETE FROM produtos  WHERE id = "
-    const párametros = [req.params.id]
+app.delete("/jogos/:codigojg",async(req,res)=>{
+    console.log(req.params.codigojg)
+    const query= "DELETE FROM produtos  WHERE codigojg = "
+    const párametros = [req.params.codigojg]
 
     const banco = new BancoMysql()
     await banco.criarConexao()
-    const result = await banco.consultar(query,parametros)
+    const result = await banco.consultar(req.params.codigojg)
     await banco.finalizarConexao()
-    res.send("Produto Excluido com Sucesso id:"+req.params.id)
+    res.send("Produto Excluido com Sucesso id:"+req.params.codigojg)
 })
 
 //ALTERAR
-app.put("/produtos/:id",(req,res)=>{
-    console.log(req.params.id)
+app.put("/jogos/:codigojg",(req,res)=>{
+    console.log(req.params.codigojg)
 })
 
 
