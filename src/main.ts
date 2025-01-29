@@ -46,6 +46,7 @@ app.post("/jogos", async (req, res) => {
 });
 
 app.delete("/jogos/:codigojg", async (req, res) => {
+    try {
     const connection = await mysql.createConnection({
         host: process.env.dbhost || "localhost",
         user: process.env.dbuser || "root",
@@ -57,7 +58,7 @@ app.delete("/jogos/:codigojg", async (req, res) => {
     const query = "DELETE FROM jogos WHERE codigojg = ?";
     const parametros = [req.params.codigojg];
     
-    try {
+    
         // O resultado da consulta será um array com um objeto 'ResultSetHeader'
         const [result] = await connection.query(query, parametros);
         await connection.end();
