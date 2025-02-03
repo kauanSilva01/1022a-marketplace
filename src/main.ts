@@ -1,6 +1,7 @@
 import express from 'express';
 import mysql from 'mysql2/promise';
 import cors from 'cors';
+import BancoMysql from './db/banco-mysql';
 
 const app = express(); // Criação da instância do Express
 app.use(express.json()); // Middleware para JSON
@@ -24,6 +25,31 @@ app.get("/jogos", async (req, res) => {
         res.status(500).send("Server ERROR");
     }
 });
+app.get("/jogos", async (req, res) => {
+    try {
+        const banco = new BancoMysql()
+        await banco.criarConexao()
+        const result = await banco.listar()
+        await banco.finalizarConexao()
+        res.send(result)
+    } catch (e) {
+        console.log(e)
+        res.status(500).send("Server ERROR")
+    }
+})
+app.get("/jogos/:codigojg", async (req, res) => {
+    try {
+        
+        const banco = new BancoMysql()
+        await banco.criarConexao()
+        const result = await banco.listarPorId(req.params.codigojg)
+        await banco.finalizarConexao()
+        res.send(result)
+    } catch (e) {
+        console.log(e)
+        res.status(500).send("Server ERROR")
+    }
+})
 
 // Rota para adicionar um novo jogo
 app.post("/jogos", async (req, res) => {
