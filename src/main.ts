@@ -101,11 +101,16 @@ app.delete("/jogos/:codigojg", async (req, res) => {
     }
 });
 
-// Rota para atualizar um jogo (ainda em construção)
-app.put("/jogos/:codigojg", (req, res) => {
-    console.log(req.params.codigojg);
-    // Aqui você pode adicionar a lógica para atualizar o jogo
-});
+
+app.put("/jogos/:codigojg",async(req,res)=>{
+    const {nome,informacaojg,preco,imagem} = req.body
+    const jogo = {nome,informacaojg,preco,imagem}
+    const banco = new BancoMysql()
+    await banco.criarConexao()
+    const result = await banco.alterar(req.params.codigojg,jogo)
+    await banco.finalizarConexao()
+    res.status(200).send("Produto alterado com sucesso id: "+req.params.codigojg)
+})
 
 // Inicializando o servidor
 app.listen(8000, () => {
