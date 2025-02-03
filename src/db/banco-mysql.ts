@@ -39,7 +39,7 @@ class BancoMysql{
     }
     async alterar(codigojg:string,jogos:{codigojg?:string,nome:string,informacaojg:string,imagem:string,preco:string}){
         if(!this.connection) throw new Error("Erro de conexão com o banco de dados.")
-        const [result, fields] = await this.connection.query("UPDATE jogos SET nome=?,descricao=?,preco=?,imagem=? WHERE id=?",[jogos.nome,jogos.informacaojg,jogos.preco,jogos.imagem,codigojg])
+        const [result, fields] = await this.connection.query("UPDATE jogos SET nome=?,informacaojg=?,imagem=?,preco=? WHERE codigojg=?",[jogos.nome,jogos.informacaojg,jogos.imagem,jogos.preco,codigojg])
         return result
     }
     async listarPorId(codigojg:string){
