@@ -25,6 +25,7 @@ app.get("/jogos", async (req, res) => {
         res.status(500).send("Server ERROR");
     }
 });
+//Puxar Jogos 
 app.get("/jogos", async (req, res) => {
     try {
         const banco = new BancoMysql()
@@ -37,6 +38,7 @@ app.get("/jogos", async (req, res) => {
         res.status(500).send("Server ERROR")
     }
 })
+//Puxar jogos pelo ID
 app.get("/jogos/:codigojg", async (req, res) => {
     try {
         
@@ -70,7 +72,7 @@ app.post("/jogos", async (req, res) => {
         res.status(500).send(e);
     }
 });
-
+//Delete
 app.delete("/jogos/:codigojg", async (req, res) => {
     try {
     const connection = await mysql.createConnection({
@@ -101,7 +103,7 @@ app.delete("/jogos/:codigojg", async (req, res) => {
     }
 });
 
-
+//Alterar Jogos
 app.put("/jogos/:codigojg",async(req,res)=>{
     const {nome,informacaojg,preco,imagem} = req.body
     const jogo = {nome,informacaojg,preco,imagem}
